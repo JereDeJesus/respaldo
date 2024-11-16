@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Ventas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Lavandería El Buen Lavar</h1>
+        <h2>Lista de Control de Lavado de Prendas de Vestir</h2>
+        
+        <!-- lista de tareas -->
+        <ul id="task-list"></ul>
+        
+        <!-- Form para seleccionar el item y el precio-->
+        <form id="task-form">
+            <label for="item-type">Tipo de Prenda de Vestir:</label>
+            <select id="item-type">
+                <option value="camisa">Camisa</option>
+                <option value="pantalon">Pantalón</option>
+                <option value="chaleco">Chaleco</option>
+                <option value="sueter">Suéter</option>
+            </select>
+            
+            <label for="task-price">Precio Unitario:</label>
+            <input type="text" id="task-price" placeholder="Precio" readonly>
+            
+            <label for="task-quantity">Cantidad:</label>
+            <input type="number" id="task-quantity" placeholder="Cantidad" min="1" value="1">
+            
+            <button type="button" id="add-sale">Agregar Venta</button>
+        </form>
+    </div>
+    
+    <div id="total-ventas" style="margin-top: 20px; font-weight: bold;"></div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Variables globales
+            let ventas = [];
+            let totalVentas = 0;
+
+            // Función para establecer el precio
+            const setPrecio = () => {
+                const itemType = document.getElementById("item-type").value;
+                let price;
+
+                switch (itemType) {
+                    case "camisa":
+                        price = 10;
+                        break;
+                    case "pantalon":
+                        price = 10;
+                        break;
+                    case "chaleco":
+                        price = 20;
+                        break;
+                    case "sueter":
+                        price = 15;
+                        break;
+                    default:
+                        price = 0;
+                }
+
+                document.getElementById("task-price").value = price.toFixed(2);
+            };
+
+            // Función para agregar venta
+            const agregarVenta = () => {
+                const itemType = document.getElementById("item-type").value;
+                const taskPrice = parseFloat(document.getElementById("task-price").value);
+                const taskQuantity = parseInt(document.getElementById("task-quantity").value);
+
+                if (isNaN(taskPrice) || isNaN(taskQuantity) || taskQuantity < 1) {
+                    alert("Por favor, ingrese una cantidad válida y seleccione un tipo de prenda.");
+                    return;
+                }
+
+                const saleTotal = taskPrice * taskQuantity;
+                ventas.push({ item: itemType, price: taskPrice, quantity: taskQuantity, total: saleTotal });
+                totalVentas += saleTotal;
+
+                mostrarVentas();
+                mostrarTotal();
+            };
+
+            // Función para mostrar ventas
+            const mostrarVentas = () => {
+                const taskList = document.getElementById("task-list");
+                taskList.innerHTML = "";
+
+                ventas.forEach((venta) => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `Prenda: ${venta.item}, Precio Unitario: $${venta.price.toFixed(2)}, Cantidad: ${venta.quantity}, Total: $${venta.total.toFixed(2)}`;
+                    taskList.appendChild(listItem);
+                });
+            };
+
+            // Función para mostrar total de ventas
+            const mostrarTotal = () => {
+                const totalDiv = document.getElementById("total-ventas");
+                totalDiv.textContent = `Total de Ventas: $${totalVentas.toFixed(2)}`;
+            };
+
+            // Asignar eventos
+            document.getElementById("item-type").addEventListener("change", setPrecio);
+            document.getElementById("add-sale").addEventListener("click", agregarVenta);
+        });
+    </script>
+</body>
+</html>
