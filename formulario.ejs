@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Comentarios</title>
+    <link rel="stylesheet" href="/style_formulario.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Lavandería El Buen Lavar</h1>
+        <h2>Formulario de Contacto</h2>
+        
+        <!-- Formulario para capturar nombre, correo y comentario -->
+        <form action="/add" method="POST">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+          
+            <label for="correo">Correo:</label>
+            <input type="email" id="correo" name="correo" required>
+          
+            <label for="comentario">Comentario:</label>
+            <textarea id="comentario" name="comentario" required></textarea>
+          
+            <button type="submit">Enviar</button>
+          </form>          
+        
+        <!-- Mensaje de confirmación -->
+        <p id="confirmation-message" style="color: green; display: none;">Comentario enviado con éxito.</p>
+    </div>
+    
+    <script>
+        // URL del backend (cambiar por tu servidor)
+        const API_URL = 'http://localhost:3000'; 
+        
+        // Selección de elementos
+        const submitButton = document.getElementById('submit-comment');
+        const confirmationMessage = document.getElementById('confirmation-message');
+        const commentForm = document.getElementById('comment-form');
+
+        // Manejo del evento para enviar el formulario
+        submitButton.addEventListener('click', async () => {
+            // Obtener valores del formulario
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const comment = document.getElementById('comment').value.trim();
+
+            // Validar campos
+            if (name === '' || email === '' || comment === '') {
+                alert('Por favor, completa todos los campos antes de enviar.');
+                return;
+            }
+
+            // Preparar datos para enviar
+            const data = {
+                name: name,
+                email: email,
+                comment: comment
+            };
+
+            try {
+                // Enviar los datos al servidor mediante una solicitud POST
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                // Verificar si la solicitud fue exitosa
+                if (response.ok) {
+                    confirmationMessage.style.display = 'block'; // Mostrar mensaje de éxito
+                    commentForm.reset(); // Limpiar formulario
+                } else {
+                    alert('Hubo un error al enviar el comentario. Intenta nuevamente.');
+                }
+            } catch (error) {
+                console.error('Error al conectar con el servidor:', error);
+                alert('No se pudo enviar el comentario. Verifica tu conexión.');
+            }
+        });
+    </script>
+</body>
+</html>

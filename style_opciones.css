@@ -1,0 +1,56 @@
+/* General */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f6f3f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('imagenes/camisa_3.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* Contenedor principal */
+.container {
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Títulos */
+h1 {
+    margin-bottom: 20px;
+    color: #202020;
+    background-color: #35dcd4;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 24px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.button:hover {
+    background-color: #45a049;
+}

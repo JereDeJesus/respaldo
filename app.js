@@ -1,39 +1,30 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const mongoose = require('mongoose');
+const contactoController = require('./controllers/contactoController');
 
 const app = express();
 const PORT = 3000;
 
+// Conexión a MongoDB
+mongoose.connect('mongodb://localhost:27017/contactoDB', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Conectado a MongoDB'))
+  .catch(err => console.error('Error al conectar a MongoDB:', err));
+
 // Middleware
-app.use(bodyParser.urlencoded({ extended: true })); // Para manejar datos de formularios
-app.use(express.static(path.join(__dirname, 'public'))); // Archivos estáticos
-app.set('view engine', 'ejs'); // Configurar EJS
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Datos simulados
-let items = [];
+// Ruta para mostrar el formulario de contacto
+app.get('/', contactoController.showForm);
 
-// Rutas
-app.get('/', (req, res) => {
-    res.render('index', { items });
-});
-
-app.post('/add', (req, res) => {
-    const { name } = req.body;
-    if (name) {
-        items.push(name); // Agrega el elemento
-    }
-    res.redirect('/'); // Redirige a la página principal
-});
-
-app.post('/delete', (req, res) => {
-    const { name } = req.body;
-    items = items.filter(item => item !== name); // Elimina el elemento
-    res.redirect('/');
-});
+// Ruta para manejar el envío del formulario de contacto
+app.post('/guardar', contactoController.saveContacto);
 
 // Inicia el servidor
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
