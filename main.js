@@ -1,11 +1,10 @@
-// server.js
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const axios = require('axios');
 
-// Requiere tus controladores
-const contactoController = require('./controllers/contactoController');
-const calculoController = require('./controllers/calculoController');
+// Requiere el controlador de contacto
+const contactoController = require('./controller/controllermodel'); 
 
 // Configurar Express
 const app = express();
@@ -25,22 +24,34 @@ app.use(express.static(path.join(__dirname, 'public'))); // Archivos estáticos 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Definir las rutas
 // Ruta para mostrar el formulario de contacto
 app.get('/contacto', contactoController.showForm);
 
 // Ruta para guardar el contacto
-app.post('/contacto/guardar', contactoController.saveContacto);
+app.post('/contacto/guardar', async (req, res) => {
+    const { gRecaptchaResponse, nombre, correo, comentario } = req.body;
+    
+    // Verificar CAPTCHA
+    const secretKey = '6LcypLwqAAAAAM-awIWcizLvzlPtjMq-tGbuFBIi'; // Usa tu clave secreta de Google reCAPTCHA
 
-// Ruta para mostrar el formulario de cálculo
-app.get('/calculo', calculoController.showForm);
+    const googleResponse = await axios.post('https://www.google.com/recaptcha/api/siteverify', null, {
+        params: {
+            secret: secretKey,
+            response: gRecaptchaResponse
+        }
+    });
 
-// Ruta para guardar el cálculo
-app.post('/calculo/guardar', calculoController.saveCalculo);
+    if (googleResponse.data.success) {
+        // CAPTCHA validado correctamente, procesamos los datos
+        await contactoController.saveContacto(req, res);  // Llama al método de tu controlador para guardar el contacto
+    } else {
+        res.status(400).send('Verificación de CAPTCHA fallida.');
+    }
+});
 
-// Ruta de inicio, puede redirigir a alguna página principal si es necesario
+// Ruta de inicio
 app.get('/', (req, res) => {
-  res.render('inicio'); // Asegúrate de tener esta vista, o redirige a alguna página de opciones
+  res.render('opciones'); // Asegúrate de tener esta vista, o redirige a alguna página de opciones
 });
 
 // Iniciar el servidor

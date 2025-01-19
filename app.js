@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const mongoose = require('mongoose');
-const contactoController = require('./controllers/contactoController');
+const contactoController = require('./controller/controllermodel');
 
 const app = express();
 const PORT = 3000;
