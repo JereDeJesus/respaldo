@@ -5,6 +5,7 @@ const axios = require('axios');
 
 // Requiere el controlador de contacto
 const contactoController = require('./controller/controllermodel'); 
+const verificarCaptcha = require('./middlewares/captchamiddleware')
 
 // Configurar Express
 const app = express();
