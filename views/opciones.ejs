@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -21,16 +21,37 @@
             <form action="/index" method="GET">
                 <button type="submit" class="button">Formulario de Cálculo</button>
             
-              <!-- reCAPTCHA -->
-  <div class="g-recaptcha" data-sitekey="6LcypLwqAAAAAOmwTCiXq3083hlgaIezfeP5GxHu"></div><br>
-
-            
-            
+                <!-- reCAPTCHA -->
+                <div class="g-recaptcha" data-sitekey="6LcypLwqAAAAAOmwTCiXq3083hlgaIezfeP5GxHu"></div><br>
             </form>
 
-            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+            <!-- Botón para mostrar la ubicación del servicio -->
+            <button id="show-location" class="button">Mostrar Ubicación del Servicio</button>
+        </div>
 
+        <!-- Div para el mapa (inicialmente oculto) -->
+        <div id="map-container" style="display: none; margin-top: 20px;">
+            <iframe id="map" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
+
+    <script>
+        // URL del mapa de Google con la ubicación del servicio
+        const servicioURL = "https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d62823.52185748939!2d-67.47258879999998!3d10.223615999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses-419!2sve!4v1737484756145!5m2!1ses-419!2sve";  // URL del servicio
+
+        // Mostrar el mapa al hacer clic en el botón
+        document.getElementById('show-location').addEventListener('click', () => {
+            const mapContainer = document.getElementById('map-container');
+            const mapIframe = document.getElementById('map');
+            
+            // Asignar la URL del mapa al iframe
+            mapIframe.src = servicioURL;
+            
+            // Mostrar el contenedor del mapa
+            mapContainer.style.display = "block";
+        });
+    </script>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>
